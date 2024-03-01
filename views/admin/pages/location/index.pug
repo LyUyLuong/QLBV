@@ -1,0 +1,167 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
+include ../../mixins/sort.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+
+  h1(class="mb-4") #{pageTitle}
+
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter-status(filterState)
+        .col-6
+          +search(keyword,[
+            {
+              label: "Tên nhân viên",
+              value: "TENNV"
+            },
+            {
+              label: "Mã nhân viên",
+              value: "MANV"
+            }
+          ])
+
+  .card.mb-3
+    .card-header Sắp xếp
+    .card-body
+      .row
+        .col-4
+          +sort([
+            {
+              label: "Vị trí giảm dần",
+              value: "MANV-desc"
+            },
+            {
+              label: "Vị trí tăng dần",
+              value: "MANV-asc"
+            },
+            {
+              label: "Mã khoa giảm dần",
+              value: "MAKHOA-desc"
+            },
+            {
+              label: "Mã khoa tăng dần",
+              value: "MAKHOA-asc"
+            },
+            {
+              label: "Lương giảm dần",
+              value: "MLUONG-desc"
+            },
+            {
+              label: "Lương tăng dần",
+              value: "MLUONG-asc"
+            }
+          ])
+  
+  .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+              +form-change-multi(`/${prefixAdmin}/location/change-multi?_method=PATCH`)
+          .col-4
+              a(
+                href=`/${prefixAdmin}/location/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
+
+
+  table(
+          class="table table-hover table-sm"
+          checkbox-multi
+        )
+    thead
+      tr
+        td
+          input(
+              type="checkbox"
+              name="checkall"
+          )
+        th STT
+        th Hình ảnh
+        th Địa chỉ
+        th Khoa
+        th Status
+        th Hành động
+
+    tbody
+      if(locations.length > 0)
+        each location, index in locations
+          tr
+            td
+              input(
+                type="checkbox"
+                name="id"
+                value=location.MAKHOA
+                data-location = location.STT
+              ) 
+            td #{index + 1}
+            td
+              img(
+                src=location.IMAGE
+                alt=`${location.DIADIEM}`
+                width="100px"
+                height="auto"
+              )
+            td #{location.DIADIEM}
+            td #{location.MAKHOA}
+            td
+              if(location.status == "active")
+                button(
+                  class="badge badge-success"
+                  button-change-status
+                  data-status=location.status
+                  data-id=location.MAKHOA
+                  data-location=location.STT
+                ) Hoạt động
+              else
+                button(
+                  class="badge badge-danger"
+                  button-change-status
+                  data-status=location.status
+                  data-id=location.MAKHOA
+                  data-location=location.STT
+                ) Dừng hoạt động
+            td
+              a(
+                  href=`/${prefixAdmin}/location/detail/${location.MAKHOA}`
+                  class="btn btn-secondary btn-sm"
+                ) Chi tiết
+              a(
+                  href=`/${prefixAdmin}/location/edit/${location.MAKHOA}`
+                  class="btn btn-warning btn-sm"
+              ) Sửa
+              button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=location.MAKHOA
+                  ) Xóa
+      else
+        tr
+          td(
+            colspan="8"
+            class="text-center"
+          ) Không tìm thấy địa điểm nào
+  form(
+    form-change-status
+    action=""
+    method="POST"
+    data-path=`/${prefixAdmin}/location/change-status`
+  )
+
+  form(
+    form-delete-item
+    action=""
+    method="POST"
+    data-path=`/${prefixAdmin}/location/delete`
+  )
+  +pagination(pagination)

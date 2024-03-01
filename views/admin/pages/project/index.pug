@@ -1,0 +1,182 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
+include ../../mixins/sort.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+
+  h1(class="mb-4") #{pageTitle}
+
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter-status(filterState)
+        .col-6
+          +search(keyword,[
+            {
+              label: "Tên đề án",
+              value: "TENDA"
+            },
+            {
+              label: "Mã đề án",
+              value: "MADA"
+            }
+          ])
+
+  .card.mb-3
+    .card-header Sắp xếp
+    .card-body
+      .row
+        .col-4
+          +sort([
+            {
+              label: "Vị trí giảm dần",
+              value: "MADA-desc"
+            },
+            {
+              label: "Vị trí tăng dần",
+              value: "MADA-asc"
+            },
+            {
+              label: "Tên đề án giảm dần",
+              value: "TENDA-desc"
+            },
+            {
+              label: "Tên đề án tăng dần",
+              value: "TENDA-asc"
+            },
+            {
+              label: "Ngày bắt đầu giảm dần",
+              value: "NGAYBD-desc"
+            },
+            {
+              label: "Ngày bắt đầu tăng dần",
+              value: "NGAYBD-asc"
+            },
+            {
+              label: "Ngày kết thúc giảm dần",
+              value: "NGAYKT-desc"
+            },
+            {
+              label: "Ngày kết thúc tăng dần",
+              value: "NGAYKT-asc"
+            }
+          ])
+  
+  .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+              +form-change-multi(`/${prefixAdmin}/project/change-multi?_method=PATCH`)
+          .col-4
+              a(
+                href=`/${prefixAdmin}/project/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
+
+
+  table(
+          class="table table-hover table-sm"
+          checkbox-multi
+        )
+    thead
+      tr
+        td
+          input(
+              type="checkbox"
+              name="checkall"
+          )
+        th STT
+        th Hình ảnh
+        th Tên dự án
+        th Điểm đánh giá
+        th Khoa
+        th Ngày bắt đầu
+        th Ngày kết thúc
+        th Status
+        th Hành động
+
+    tbody
+      if(projects.length > 0)
+        each project, index in projects
+          tr
+            td
+              input(
+                type="checkbox"
+                name="id"
+                value=project.MADA
+              ) 
+            td #{index + 1}
+            td
+              img(
+                src=project.IMAGE
+                alt=`${project.TENDA}`
+                width="100px"
+                height="auto"
+              )
+            td #{project.TENDA}
+            td #{project.DDIEM_DA}
+            td #{project.MAKHOA}
+            td #{project.NGAYBD}
+            td 
+              if(project.NGAYKT)
+                p #{project.NGAYKT}
+              else 
+                p Đang diễn ra
+            td
+              if(project.status == "active")
+                button(
+                  class="badge badge-success"
+                  button-change-status
+                  data-status=project.status
+                  data-id=project.MADA
+                ) Hoạt động
+              else
+                button(
+                  class="badge badge-danger"
+                  button-change-status
+                  data-status=project.status
+                  data-id=project.MADA
+                ) Dừng hoạt động
+            td
+              a(
+                  href=`/${prefixAdmin}/project/detail/${project.MADA}`
+                  class="btn btn-secondary btn-sm"
+                ) Chi tiết
+              a(
+                  href=`/${prefixAdmin}/project/edit/${project.MADA}`
+                  class="btn btn-warning btn-sm"
+              ) Sửa
+              button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=project.MADA
+                  ) Xóa
+      else
+        tr
+          td(
+            colspan="8"
+            class="text-center"
+          ) Không tìm thấy dự án nào
+  form(
+    form-change-status
+    action=""
+    method="POST"
+    data-path=`/${prefixAdmin}/project/change-status`
+  )
+
+  form(
+    form-delete-item
+    action=""
+    method="POST"
+    data-path=`/${prefixAdmin}/project/delete`
+  )
+  +pagination(pagination)

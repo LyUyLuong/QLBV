@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-3
+    .row
+      .col-12
+        +box-head(pageTitle)
+
+    .row
+      each employee in employees
+        .col-4.mb-3
+          .product-item
+            .inner-image
+              img(src=`/images/employee.png`, alt=`${employee.TENNV} ${employee.TENLOT}`)
+            .inner-content
+              h3.inner-title #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
+              p.inner-details 
+                | MANV: #{employee.MANV} <br>
+                | Họ: #{employee.HONV} <br>
+                | Ngày sinh: #{employee.NGSINH} <br>
+                | Giới tính: #{employee.PHAI} <br>
+                | Địa chỉ: #{employee.DCHI} <br>
+                | Mức lương: #{employee.MLUONG} <br>
+                | Mã NQL: #{employee.MA_NQL} <br>
+                | Mã khoa: #{employee.MAKHOA} <br>
+                | IMAGE: #{employee.IMAGE} <br>

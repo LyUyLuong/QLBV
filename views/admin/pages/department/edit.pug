@@ -1,0 +1,100 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+
+  h1(class="mb-4") Chỉnh sửa khoa
+
+  form(
+    action=`/${prefixAdmin}/department/edit/${department.MAKHOA}?_method=PATCH`
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label Tên khoa
+      input(
+        type="text"
+        class="form-control"
+        id="departmentName"
+        name="TENKHOA"
+        value=department.TENKHOA
+      )
+
+    div(class="form-group")
+      label Trưởng khoa
+      select(
+        class="form-control"
+        id="departmentHead"
+        name="TRPHG"
+      )
+        each NV in NQL 
+          option(value=NV.MANV selected=(NV.MANV == department.TRPHG)) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
+
+    div(class="form-group")
+      label Ngày nhận chức
+      input(
+        type="date"
+        class="form-control"
+        id="departmentStartDate"
+        name="NGNC"
+        value=department.NGNC
+      )
+
+    div(class="form-group")
+      label Ngày thành lập
+      input(
+        type="date"
+        class="form-control"
+        id="departmentEstablishDate"
+        name="NGTL"
+        value=department.NGTL
+      )
+
+    div(
+        class="form-group"
+        upload-image
+      )
+        label(for="IMAGE") Ảnh
+        input(
+          type="file"
+          class="form-control-file"
+          id="image"
+          name="IMAGE"
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=department.IMAGE
+          class="image-preview"
+          upload-image-preview
+        )
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="departmentActive"
+        name="status"
+        value="active"
+        checked=(department.status == "active")
+      )
+      label(for="departmentActive" class="form-check-label") Hoạt động
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="departmentInactive"
+        name="status"
+        value="inactive"
+        checked=(department.status == "inactive")
+      )
+      label(for="departmentInactive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa

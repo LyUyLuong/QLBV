@@ -1,0 +1,145 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+
+  h1(class="mb-4") Thêm mới nhân viên
+
+  form(
+    action=`/${prefixAdmin}/employee/create`
+    id="form-create-employee"
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label Họ và tên
+      .d-flex
+        input(
+          type="text"
+          class="form-control mr-2"
+          id="lastname"
+          name="HONV"
+          placeholder="Họ"
+          required
+        )
+        input(
+          type="text"
+          class="form-control mr-2"
+          id="middlename"
+          name="TENLOT"
+          placeholder="Tên lót"
+          required
+        )
+        input(
+          type="text"
+          class="form-control"
+          id="firstname"
+          name="TENNV"
+          placeholder="Tên"
+          required
+        )
+    div(class="form-group")
+      label(for="dob") Ngày sinh
+      input(
+        type="date"
+        class="form-control"
+        id="dob"
+        name="NGSINH"
+        required
+      )
+    div(
+        class="form-group"
+        upload-image
+      )
+        label(for="IMAGE") Ảnh
+        input(
+          type="file"
+          class="form-control-file"
+          id="image"
+          name="IMAGE" 
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=""
+          class="image-preview"
+          upload-image-preview
+        )
+    div(class="form-group")
+      label(for="gender") Giới tính
+      select(
+        class="form-control"
+        id="gender"
+        name="PHAI"
+        required
+      )
+        option(value="Nam") Nam
+        option(value="Nữ") Nữ
+    div(class="form-group")
+      label(for="address") Địa chỉ
+      input(
+        type="text"
+        class="form-control"
+        id="address"
+        name="DCHI"
+        required
+      )
+    div(class="form-group")
+      label(for="salary") Chức vụ
+      select(
+        class="form-control"
+        id="salary"
+        name="MLUONG"
+        value="0"
+        min="0"
+        required
+      )
+        each duty in duties
+          option(value=duty.MLUONG) #{duty.TENCV}
+    div(class="form-group")
+      label(for="MA_NQL") Mã NQL
+      select(
+        class="form-control"
+        id="MA_NQL"
+        name="MA_NQL"
+        required
+      )
+        option(value=" ") Không có
+        each NV in NQL 
+          option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
+    div(class="form-group")
+      label(for="department") Khoa
+      select(
+        class="form-control"
+        id="department"
+        name="MAKHOA"
+        required
+      )
+        each department in departments 
+          option(value=department.MAKHOA) #{department.TENKHOA}
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
+

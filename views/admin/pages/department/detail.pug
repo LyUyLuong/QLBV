@@ -1,0 +1,36 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  if(department.TENKHOA)
+    h1(class="mb-4") #{department.TENKHOA}
+
+  if (department.TRPHG)
+    div(class="mb-4") Trưởng phòng: <b>#{department.TRPHG}</b>
+
+  if (department.NGNC)
+    div(class="mb-4") Ngày nhận chức: <b>#{department.NGNC}</b>
+
+  if (department.NGTL)
+    div(class="mb-4") Ngày thành lập: <b>#{department.NGTL}</b>
+
+  if (department.IMAGE)
+    div(class="mb-4")
+      img(
+        src=department.IMAGE
+        style="width: 200px"
+      )
+
+  if (department.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (department.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+
+  if (department.createdAt)
+    div(class="mb-4") Ngày tạo: <b>#{department.createdAt}</b>
+
+  if (department.updatedAt)
+    div(class="mb-4") Ngày cập nhật: <b>#{department.updatedAt}</b>

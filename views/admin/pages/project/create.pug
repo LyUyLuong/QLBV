@@ -1,0 +1,113 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+
+
+  h1(class="mb-4") Thêm mới dự án
+
+  form(
+    action=`/${prefixAdmin}/project/create`  
+    id="form-create-project"  
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label(for="TENDA") Tên dự án
+      input(
+        type="text"
+        class="form-control"
+        id="TENDA"
+        name="TENDA"
+        placeholder="Tên dự án"
+        required
+      )
+    div(class="form-group")
+      label(for="DDIEM_DA") Địa điểm đề án
+      input(
+        type="text"
+        class="form-control"
+        id="DDIEM_DA"
+        name="DDIEM_DA"
+        placeholder="Địa điểm dự án"
+        required
+      )
+    div(class="form-group")
+      label(for="MAKHOA") Khoa
+      select(
+        type="text"
+        class="form-control"
+        id="MAKHOA"
+        name="MAKHOA"
+        placeholder="Mã khoa"
+        required
+      )
+        each department in departments 
+          option(value=department.MAKHOA) #{department.TENKHOA}
+
+      div.form-group
+        label.form-check-label.mx-3(for="checkAll")
+          input.form-check-input(type="checkbox" id="checkAll" name="checkAll")
+          | Check all
+
+      each employee in employees
+        div.form-group.employee(data-employee=employee.MAKHOA)
+          label.form-check-label.mx-3(for=`MANV_${employee.MANV}`)
+            input.form-check-input(type="checkbox" id=`MANV_${employee.MANV}` name="MANV" value=employee.MANV)
+            | #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
+
+
+
+
+    div(class="form-group")
+      label(for="NGAYBD") Ngày bắt đầu
+      input(
+        type="date"
+        class="form-control"
+        id="NGAYBD"
+        name="NGAYBD"
+        required
+      )
+    div(
+        class="form-group"
+        upload-image
+      )
+        label(for="IMAGE") Ảnh
+        input(
+          type="file"
+          class="form-control-file"
+          id="image"
+          name="IMAGE" 
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=""
+          class="image-preview"
+          upload-image-preview
+        )
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới

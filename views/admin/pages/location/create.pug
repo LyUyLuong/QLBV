@@ -1,0 +1,76 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+
+  h1(class="mb-4") Thêm mới địa điểm 
+
+  form(
+    action=`/${prefixAdmin}/location/create`  
+    id="form-create-location"  
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label(for="DIADIEM") Tên địa điểm
+      input(
+        type="text"
+        class="form-control"
+        id="DIADIEM"
+        name="DIADIEM"
+        placeholder="Tên địa điểm"
+        required
+      )
+    div(class="form-group")
+      label(for="MAKHOA") Khoa
+      select(
+        class="form-control"
+        id="MAKHOA"
+        name="MAKHOA"
+        required
+      )
+        each department in departments 
+          option(value=department.MAKHOA) #{department.TENKHOA}
+    div(
+        class="form-group"
+        upload-image
+      )
+        label(for="IMAGE") Ảnh
+        input(
+          type="file"
+          class="form-control-file"
+          id="image"
+          name="IMAGE" 
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=""
+          class="image-preview"
+          upload-image-preview
+        )
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
