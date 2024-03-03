@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
   +alert-error(5000)
@@ -12,16 +13,6 @@ block main
     method="POST"
     enctype="multipart/form-data"
   )
-    div(class="form-group")
-      label(for="MAKHOA") Mã khoa
-      input(
-        type="text"
-        class="form-control"
-        id="MAKHOA"
-        name="MAKHOA"
-        placeholder="Mã khoa"
-        required
-      )
     div(class="form-group")
       label(for="TENKHOA") Tên khoa
       input(
@@ -42,6 +33,18 @@ block main
         option(value="") Không có
         each NV in NQL 
           option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
+
+    div(class="form-group")
+      label(for="KHOA_CHA") Thuộc khoa
+      select(
+        class="form-control"
+        id="KHOA_CHA"
+        name="KHOA_CHA"
+      )
+        option(value="") Không có
+        +select-tree(departments)
+
+
     div(class="form-group")
       label(for="NGNC") Ngày nhận chức
       input(

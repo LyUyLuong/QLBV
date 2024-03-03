@@ -17,6 +17,9 @@ block main
   if (project.NGAYKT)
     div(class="mb-4") Ngày kết thúc: <b>#{project.NGAYKT}</b>
 
+  if (project.desc)
+    div(class="mb-4") !{project.desc}
+
   if (project.IMAGE)
     div(class="mb-4")
       img(

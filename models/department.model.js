@@ -51,7 +51,15 @@ const Department = sequelize.define("department", {
     },
     updatedAt: {
       type: DataTypes.DATE,
-    }
+    },
+    KHOA_CHA: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      references: {
+        model: 'khoa',
+        key: 'MAKHOA'
+      }
+    },
   
   }, {
     tableName: 'khoa',

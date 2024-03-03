@@ -35,6 +35,17 @@ block main
         each department in departments 
           option(value=department.MAKHOA) #{department.TENKHOA}
 
+      div.form-group
+        label.form-check-label.mx-3(for="checkAll")
+          input.form-check-input(type="checkbox" id="checkAll" name="checkAll")
+          | Check all
+
+      each employee in employees
+        div.form-group.employee(data-employee=employee.MAKHOA)
+          label.form-check-label.mx-3(for=`MANV_${employee.MANV}`)
+            input.form-check-input(type="checkbox" id=`MANV_${employee.MANV}` name="MANV" value=employee.MANV)
+            | #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
+
     div(class="form-group")
       label Ngày bắt đầu
       input(
@@ -46,14 +57,14 @@ block main
       )
 
     div(class="form-group")
-      label Ngày kết thúc
-      input(
-        type="date"
-        class="form-control"
-        id="projectEndDate"
-        name="NGAYKT"
-        value=project.NGAYKT
-      )
+        label(for="desc") Mô tả
+        textarea(
+          class="form-control textarea-mce"
+          id="desc"
+          name="desc"
+          rows="5"
+        ) #{project.desc}
+
 
     div(
         class="form-group"

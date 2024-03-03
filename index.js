@@ -2,7 +2,8 @@ const express = require("express");
 const methodOverride = require("method-override");
 const flash = require("express-flash");
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const session = require('express-session');
+const path = require("path");
 
 
 const bodyParser = require('body-parser');
@@ -27,6 +28,15 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
 //End Flash
+
+//TinyMCE
+
+app.use(
+  '/tinymce',
+  express.static(path.join(__dirname, 'node_modules', 'tinymce'))
+);
+
+//End TinyMCE
 
 
 // parse application/x-www-form-urlencoded

@@ -9,6 +9,7 @@ const { Op } = require('sequelize');
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination.helper");
+const createTree = require("../../helpers/createTree");
 
 const systemConfig = require("../../config/system");
 
@@ -161,9 +162,19 @@ module.exports.create = async (req, res) => {
             attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV'] // Chỉ lấy các trường cần thiết
         });
 
+        const departments = await Department.findAll({
+            raw:true
+        });
+
+        const newDepartment = createTree(departments);
+
+        //   console.log(newDepartment)
+
         res.render("admin/pages/department/create", {
             pageTitle: "Thêm mới khoa",
-            NQL: NQL // Truyền danh sách nhân viên quản lý vào template
+            NQL: NQL,
+            departments: newDepartment
+
         });
     } catch (error) {
         console.error("Lỗi khi lấy danh sách nhân viên quản lý:", error);
@@ -175,13 +186,15 @@ module.exports.create = async (req, res) => {
 module.exports.createPost = async (req, res) => {
     try {
         const countDepartments = await Department.count() + 1;
-        const MAKHOA = String(countDepartments).padStart(4, '0');
+        const MAKHOA = "KHOA"+String(countDepartments).padStart(4, '0');
 
         // Kiểm tra xem ngày nhận chức có được gán giá trị không
         let NGNC = req.body.NGNC ? req.body.NGNC : null;
 
         // Kiểm tra xem trưởng phòng có được gán giá trị không
         let TRPHG = req.body.TRPHG ? req.body.TRPHG : null;
+
+        let KHOA_CHA = req.body.KHOA_CHA ? req.body.KHOA_CHA : null;
 
         if (req.file && req.file.filename) {
             req.body.IMAGE = `/uploads/${req.file.filename}`;
@@ -198,6 +211,7 @@ module.exports.createPost = async (req, res) => {
             status: req.body.status || "active",
             createdAt: new Date(),
             updatedAt: new Date(),
+            KHOA_CHA: KHOA_CHA
         });
 
         req.flash("success", "Thêm mới khoa thành công!");
@@ -222,6 +236,10 @@ module.exports.edit = async (req, res) => {
 
     });
 
+    const departments = await Department.findAll({
+        raw:true
+    });
+
     const NQL = await Employee.findAll({
         attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV'] // Chỉ lấy các trường cần thiết
     });
@@ -229,7 +247,8 @@ module.exports.edit = async (req, res) => {
     res.render("admin/pages/department/edit", {
         pageTitle: "Chỉnh sửa khoa",
         department: department,
-        NQL: NQL
+        NQL: NQL,
+        departments: departments
     });
 };
 

@@ -55,6 +55,9 @@ const Project = sequelize.define("project", {
     },
     updatedAt: {
         type: DataTypes.DATE,
+    },
+    desc: {
+        type: DataTypes.TEXT,
     }
 
 }, {

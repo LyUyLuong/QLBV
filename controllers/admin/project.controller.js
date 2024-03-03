@@ -228,7 +228,7 @@ module.exports.createPost = async (req, res) => {
             req.body.IMAGE = `/uploads/${req.file.filename}`;
         }
 
-
+        // console.log(req.body.desc);
 
         const newProject = await Project.create({
             MADA: MADA,
@@ -242,6 +242,7 @@ module.exports.createPost = async (req, res) => {
             status: req.body.status || "active",
             createdAt: new Date(),
             updatedAt: new Date(),
+            desc: req.body.desc
         });
 
         const MANVTG = req.body.MANV;
@@ -286,10 +287,15 @@ module.exports.edit = async (req, res) => {
         raw: true
     });
 
+    const employees = await Employee.findAll({
+        raw: true
+    });
+
     res.render("admin/pages/project/edit", {
         pageTitle: "Chỉnh sửa đề án",
         project: project,
-        departments: departments
+        departments: departments,
+        employees: employees
     });
 };
 

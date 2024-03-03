@@ -33,6 +33,19 @@ block main
           option(value=NV.MANV selected=(NV.MANV == department.TRPHG)) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
 
     div(class="form-group")
+      label(for="KHOA_CHA") Thuộc khoa
+      select(
+        class="form-control"
+        id="KHOA_CHA"
+        name="KHOA_CHA"
+      )
+        each khoa in departments 
+          if(khoa.MAKHOA !== department.MAKHOA)
+            option(value=khoa.MAKHOA selected=(khoa.MAKHOA == department.KHOA_CHA)) #{khoa.TENKHOA}
+        option(value="") Không có
+
+
+    div(class="form-group")
       label Ngày nhận chức
       input(
         type="date"
