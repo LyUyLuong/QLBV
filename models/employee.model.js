@@ -20,6 +20,10 @@ const Employee = sequelize.define("employee", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
+  email: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
   NGSINH: {
     type: DataTypes.DATE,
   },

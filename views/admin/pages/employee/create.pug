@@ -48,6 +48,17 @@ block main
         name="NGSINH"
         required
       )
+
+    div(class="form-group")
+      label(for="email") Email
+      input(
+        type="text"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      )
+
     div(
         class="form-group"
         upload-image
@@ -95,8 +106,8 @@ block main
         min="0"
         required
       )
-        each duty in duties
-          option(value=duty.MLUONG) #{duty.TENCV}
+        each role in roles
+          option(value=role.MLUONG) #{role.title}
     div(class="form-group")
       label(for="MA_NQL") Mã NQL
       select(

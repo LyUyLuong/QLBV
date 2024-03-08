@@ -89,8 +89,8 @@ block main
         name="MLUONG"
         value=employee.MLUONG
       )
-        each duty in duties
-          option(value=duty.MLUONG) #{duty.TENCV}
+        each role in roles
+          option(value=role.MLUONG) #{role.title}
     div(class="form-group")
       label(for="MA_NQL") Mã NQL
       select(
