@@ -5,56 +5,35 @@ block main
   +alert-error(5000)
   +alert-success(5000)
 
-  h1(class="mb-4") Chỉnh sửa dự án
+  h1(class="mb-4") Chỉnh sửa địa điểm 
 
   form(
-    action=`/${prefixAdmin}/project/edit/${project.MADA}?_method=PATCH`
+    action=`/${prefixAdmin}/location/edit/${location.MAKHOA}/${location.STT}?_method=PATCH`  
+    id="form-edit-location"  
     method="POST"
     enctype="multipart/form-data"
   )
     div(class="form-group")
-      label Tên dự án
+      label(for="DIADIEM") Tên địa điểm
       input(
         type="text"
         class="form-control"
-        id="projectName"
-        name="TENDA"
-        value=project.TENDA
+        id="DIADIEM"
+        name="DIADIEM"
+        placeholder="Tên địa điểm"
+        required
+        value=location.DIADIEM
       )
-
     div(class="form-group")
       label(for="MAKHOA") Khoa
       select(
-        type="text"
         class="form-control"
         id="MAKHOA"
         name="MAKHOA"
-        placeholder="Mã khoa"
         required
       )
         each department in departments 
-          option(value=department.MAKHOA) #{department.TENKHOA}
-
-    div(class="form-group")
-      label Ngày bắt đầu
-      input(
-        type="date"
-        class="form-control"
-        id="projectStartDate"
-        name="NGAYBD"
-        value=project.NGAYBD
-      )
-
-    div(class="form-group")
-      label Ngày kết thúc
-      input(
-        type="date"
-        class="form-control"
-        id="projectEndDate"
-        name="NGAYKT"
-        value=project.NGAYKT
-      )
-
+          option(value=department.MAKHOA selected=location.MAKHOA==department.MAKHOA) #{department.TENKHOA}
     div(
         class="form-group"
         upload-image
@@ -64,38 +43,35 @@ block main
           type="file"
           class="form-control-file"
           id="image"
-          name="IMAGE"
+          name="IMAGE" 
           accept="image/*"
           upload-image-input
         )
         img(
-          src=project.IMAGE
+          src=location.IMAGE
           class="image-preview"
           upload-image-preview
         )
-
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"
         class="form-check-input"
-        id="projectActive"
+        id="statusActive"
         name="status"
         value="active"
-        checked=(project.status == "active")
+        checked=(location.status == "active" ? true: false)
       )
-      label(for="projectActive" class="form-check-label") Hoạt động
-
+      label(for="statusActive" class="form-check-label") Hoạt động
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"
         class="form-check-input"
-        id="projectInactive"
+        id="statusInActive"
         name="status"
         value="inactive"
-        checked=(project.status == "inactive")
+        checked=(location.status == "inactive" ? true: false)
       )
-      label(for="projectInactive" class="form-check-label") Dừng hoạt động
-
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
     div(class="form-group")
       button(
         type="submit"

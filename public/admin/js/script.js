@@ -1,13 +1,13 @@
 // Button Status
 const buttonsStatus = document.querySelectorAll("[button-status]");
-if(buttonsStatus.length > 0) {
+if (buttonsStatus.length > 0) {
   let url = new URL(window.location.href);
 
   buttonsStatus.forEach((button) => {
     button.addEventListener("click", () => {
       const status = button.getAttribute("button-status");
       // console.log(status);
-      if(status) {
+      if (status) {
         url.searchParams.set("status", status);
       } else {
         url.searchParams.delete("status");
@@ -21,15 +21,15 @@ if(buttonsStatus.length > 0) {
 
 // Form Search
 const formSearch = document.querySelector("#form-search");
-if(formSearch) {
+if (formSearch) {
   let url = new URL(window.location.href);
 
   formSearch.addEventListener("submit", (event) => {
     event.preventDefault();
     const keyword = event.target.elements.keyword.value;
     const valueSelected = document.querySelector("[name=valueSelected]").value;
-    
-    if(keyword && valueSelected) {
+
+    if (keyword && valueSelected) {
       url.searchParams.set("valueSelected", valueSelected);
       url.searchParams.set("keyword", keyword);
 
@@ -45,13 +45,13 @@ if(formSearch) {
 
 // Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
-if(buttonsPagination.length > 0) {
+if (buttonsPagination.length > 0) {
   let url = new URL(window.location.href);
 
   buttonsPagination.forEach(button => {
     button.addEventListener("click", () => {
       const page = button.getAttribute("button-pagination");
-      
+
       url.searchParams.set("page", page);
 
       window.location.href = url.href;
@@ -62,7 +62,7 @@ if(buttonsPagination.length > 0) {
 
 // button-change-status
 const buttonsChangeStatus = document.querySelectorAll("[button-change-status]");
-if(buttonsChangeStatus.length > 0) {
+if (buttonsChangeStatus.length > 0) {
   const formChangeStatus = document.querySelector("[form-change-status]");
   const path = formChangeStatus.getAttribute("data-path");
 
@@ -74,8 +74,8 @@ if(buttonsChangeStatus.length > 0) {
       const location = button.getAttribute("data-location");
 
       const statusChange = statusCurrent == "active" ? "inactive" : "active";
-      let action =``;
-      if(location) {
+      let action = ``;
+      if (location) {
         action = `${path}/${statusChange}/${id}/${location}?_method=PATCH`;
       }
       else {
@@ -94,12 +94,12 @@ if(buttonsChangeStatus.length > 0) {
 
 // checkbox-multi
 const checkboxMulti = document.querySelector("[checkbox-multi]");
-if(checkboxMulti) {
+if (checkboxMulti) {
   const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
   const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
-  
+
   inputCheckAll.addEventListener("click", () => {
-    if(inputCheckAll.checked) {
+    if (inputCheckAll.checked) {
       inputsId.forEach(input => {
         input.checked = true;
       });
@@ -114,7 +114,7 @@ if(checkboxMulti) {
     input.addEventListener("click", () => {
       const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
 
-      if(countChecked == inputsId.length) {
+      if (countChecked == inputsId.length) {
         inputCheckAll.checked = true;
       } else {
         inputCheckAll.checked = false;
@@ -126,22 +126,22 @@ if(checkboxMulti) {
 
 // form-change-multi
 const formChangeMulti = document.querySelector("[form-change-multi]");
-if(formChangeMulti) {
+if (formChangeMulti) {
   formChangeMulti.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const status = event.target.elements.status.value;
     // console.log(type);
 
-    if(status == "delete-all") {
+    if (status == "delete-all") {
       const isConfirm = confirm("Bạn có chắc muốn xóa những bản ghi này?");
-      if(!isConfirm) {
+      if (!isConfirm) {
         return;
       }
     }
 
     const inputsChecked = document.querySelectorAll("input[name='id']:checked");
-    if(inputsChecked.length > 0) {
+    if (inputsChecked.length > 0) {
       const ids = [];
       const locations = [];
 
@@ -151,9 +151,15 @@ if(formChangeMulti) {
         const location = input.dataset.location;
 
         const id = input.value;
+        if(location) {
+          ids.push(`${id}-${location}`);
+        }
+        else {
+          ids.push(`${id}`);
+        }
 
         // locations.push(location);
-        ids.push(`${id}-${location}`);
+
       });
 
       inputIds.value = ids.join(", ");
@@ -169,15 +175,15 @@ if(formChangeMulti) {
 
 // Delete Item
 const buttonsDelete = document.querySelectorAll("[button-delete]");
-if(buttonsDelete.length > 0) {
+if (buttonsDelete.length > 0) {
   const formDeleteItem = document.querySelector("[form-delete-item]");
   const path = formDeleteItem.getAttribute("data-path");
 
   buttonsDelete.forEach(button => {
     button.addEventListener("click", () => {
       const isConfirm = confirm("Bạn có chắc muốn xóa bản ghi này?");
-      
-      if(isConfirm) {
+
+      if (isConfirm) {
         const id = button.getAttribute("data-id");
 
         const action = `${path}/${id}?_method=DELETE`;
@@ -193,7 +199,7 @@ if(buttonsDelete.length > 0) {
 
 // Show Alert
 const showAlert = document.querySelector("[show-alert]");
-if(showAlert) {
+if (showAlert) {
   const time = parseInt(showAlert.getAttribute("data-time"));
   setTimeout(() => {
     showAlert.classList.add("alert-hidden");
@@ -208,7 +214,7 @@ if(showAlert) {
 
 // Preview Image
 const uploadImage = document.querySelector("[upload-image]");
-if(uploadImage) {
+if (uploadImage) {
   const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
   const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
 
@@ -221,86 +227,9 @@ if(uploadImage) {
 }
 // End Preview Image
 
-// Select MAKHOA in project controller
-
-
-const checkAllCheckbox = document.getElementById("checkAll");
-
-if(checkAllCheckbox) 
-{
-
-  checkAllCheckbox.addEventListener("change", function(event) {
-    const isChecked = event.target.checked; // Kiểm tra xem checkbox check all đã được chọn hay không
-    const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']"); // Lấy tất cả các checkbox nhân viên
-
-    // Kiểm tra xem có ít nhất một checkbox nhân viên tồn tại hay không
-    const hasEmployees = employeeCheckboxes.length > 0;
-    
-
-    // Ẩn hoặc hiển thị checkbox checkall tùy thuộc vào có nhân viên trong khoa hay không
-    checkAllCheckbox.style.display = hasEmployees ? "block" : "none";
-
-    // Đặt trạng thái checked của tất cả các checkbox nhân viên theo trạng thái của checkbox check all
-    employeeCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = isChecked;
-    });
-});
-
-}
-
-
-// Lắng nghe sự kiện change trên các ô nhân viên
-const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']");
-employeeCheckboxes.forEach(function(checkbox) {
-    checkbox.addEventListener("change", function() {
-        const allChecked = Array.from(employeeCheckboxes).every(function(checkbox) {
-            return checkbox.checked;
-        });
-
-        // Kiểm tra nếu tất cả các ô nhân viên đã được chọn thì kiểm tra ô "Check all", ngược lại thì bỏ kiểm tra
-        checkAllCheckbox.checked = allChecked;
-    });
-});
-
-
-// Lắng nghe sự kiện change trên thẻ select mã khoa
-const selectMakhoa = document.getElementById("MAKHOA");
-
-if(selectMakhoa) {
-
-  selectMakhoa.addEventListener("change", function(event) {
-    // Xóa các checkbox đã chọn
-
-    checkAllCheckbox.checked = false;
-    const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']:checked");
-    employeeCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-    });
-
-    // Tiếp tục với xử lý hiển thị nhân viên thuộc mã khoa mới được chọn
-    const selectedMakhoa = event.target.value; // Lấy mã khoa được chọn
-    const employees = document.querySelectorAll(".employee"); // Lấy tất cả các phần tử chứa thông tin nhân viên
-
-    // Ẩn tất cả các nhân viên trước khi hiển thị lại
-    employees.forEach(function(employee) {
-        employee.style.display = "none";
-    });
-
-    // Hiển thị chỉ các nhân viên thuộc mã khoa được chọn
-    const selectedEmployees = document.querySelectorAll(`.employee[data-employee="${selectedMakhoa}"]`);
-    selectedEmployees.forEach(function(employee) {
-        employee.style.display = "block";
-    });
-});
-}
-
-// End Select MAKHOA in project controller
-
-
-
 // Sort
 const sort = document.querySelector("[sort]");
-if(sort) {
+if (sort) {
   let url = new URL(window.location.href);
 
   const sortSelect = sort.querySelector("[sort-select]");
@@ -328,7 +257,7 @@ if(sort) {
   const sortKey = url.searchParams.get("sortKey");
   const sortValue = url.searchParams.get("sortValue");
 
-  if(sortKey && sortValue) {
+  if (sortKey && sortValue) {
     const string = `${sortKey}-${sortValue}`;
     const optionSelected = sortSelect.querySelector(`option[value="${string}"]`);
     optionSelected.selected = true;
@@ -336,3 +265,267 @@ if(sort) {
   }
 }
 // End Sort
+
+// Permissions
+const tablePermissions = document.querySelector("[table-permissions]");
+if (tablePermissions) {
+  // Submit Data
+  const buttonSubmit = document.querySelector("[button-submit]");
+  buttonSubmit.addEventListener("click", () => {
+    const roles = [];
+
+    const rows = tablePermissions.querySelectorAll("[data-name]");
+    rows.forEach(row => {
+      const name = row.getAttribute("data-name");
+      const inputs = row.querySelectorAll("input");
+      if (name == "id") {
+        inputs.forEach(input => {
+          const id = input.value;
+          roles.push({
+            id: id,
+            permissions: ""
+          });
+        });
+      } else {
+        inputs.forEach((input, index) => {
+          if (input.checked) {
+            roles[index].permissions+= name +",";
+          }
+        });
+      }
+    });
+
+    // Loại bỏ dấu phẩy cuối cùng (nếu có)
+    roles.forEach(role => {
+      if (role.permissions.endsWith(",")) {
+        role.permissions = role.permissions.slice(0, -1);
+      }
+    });
+
+    const formChangePermissions = document.querySelector("[form-change-permissions]");
+    const inputRoles = formChangePermissions.querySelector("input[name='roles']");
+    inputRoles.value = JSON.stringify(roles);
+    formChangePermissions.submit();
+  });
+
+  // Data Default
+    const divRecords = document.querySelector("[data-records]");
+    if (divRecords) {
+      const records = JSON.parse(divRecords.getAttribute("data-records"));
+      records.forEach((record, index) => {
+        const permissions = record.permissions.split(",");
+
+        permissions.forEach(permission => {
+          const row = tablePermissions.querySelector(`[data-name="${permission}"]`);
+          const input = row.querySelectorAll("input")[index];
+          input.checked = true;
+        });
+      });
+    }
+}
+// End Permissions
+
+document.addEventListener('DOMContentLoaded', function() {
+  const divEmails = document.querySelector("[data-email]");
+  if (divEmails) {
+    const emails = JSON.parse(divEmails.getAttribute("data-email"));
+
+    const MANV = document.getElementById("MANV");
+    const emailDiv = document.getElementById("email");
+
+    // Tìm giá trị MANV đang chọn trong dropdown và lấy email tương ứng
+    const selectedMANV = MANV.value;
+    const selectedEmail = emails.find(email => email.MANV == selectedMANV);
+
+    // Nếu tìm thấy email tương ứng, hiển thị vào trường email
+    if (selectedEmail) {
+      emailDiv.value = selectedEmail.email;
+    } else {
+      emailDiv.value = ''; // Nếu không tìm thấy, đặt trường email thành rỗng
+    }
+
+    // Gắn sự kiện change cho dropdown MANV để cập nhật email khi người dùng thay đổi lựa chọn
+    MANV.addEventListener("change", function(event) {
+      const MANVSelected = event.target.value;
+      const selectedEmail = emails.find(email => email.MANV == MANVSelected);
+
+      if (selectedEmail) {
+        emailDiv.value = selectedEmail.email;
+      } else {
+        emailDiv.value = '';
+      }
+    });
+  }
+});
+
+  // Chuyển đổi permissions từ chuỗi sang mảng
+  // records.forEach(record => {
+  //   record.permissions = record.permissions.split(",");
+  // });
+
+  // console.log(emails);
+
+// Select MAKHOA in create project
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const divMAKHOA = document.getElementById("MAKHOA");
+  const checkAllDepartment = document.getElementById("checkAll");
+
+  if (divMAKHOA) {
+    const divEmployees = document.querySelector("[data-employees]");
+    const divMANV = document.querySelector("[divMANV]");
+
+    function displayEmployees(selectedMAKHOA) {
+      divMANV.innerHTML = '';
+      const employeesJSON = divEmployees.getAttribute("data-employees");
+      const employees = JSON.parse(employeesJSON);
+
+      employees.forEach(employee => {
+        if (employee.MAKHOA === selectedMAKHOA) {
+          const containerDiv = document.createElement('div');
+          containerDiv.className = 'form-check';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'form-check-input';
+          checkbox.id = employee.MANV;
+          checkbox.name = 'MANV';
+          checkbox.value = employee.MANV;
+
+          const label = document.createElement('label');
+          label.className = 'form-check-label';
+          label.htmlFor = employee.MANV;
+          label.textContent = `${employee.HONV} ${employee.TENLOT} ${employee.TENNV}`;
+
+          containerDiv.appendChild(checkbox);
+          containerDiv.appendChild(label);
+
+          divMANV.appendChild(containerDiv);
+        }
+      });
+
+      updateCheckboxEvents(); // Gọi hàm để cập nhật sự kiện cho checkbox
+    }
+
+    function updateCheckboxEvents() {
+      const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+          countCheckedEmployees();
+        });
+      });
+    }
+
+    function countCheckedEmployees() {
+      const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+      const checkboxesNum = checkboxes.length;
+      let checkedEmployees = 0;
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          checkedEmployees++;
+        }
+      });
+
+      // Kiểm tra và cập nhật trạng thái của nút "Chọn tất cả"
+      checkAllDepartment.checked = (checkedEmployees === checkboxesNum);
+    }
+
+    if (checkAllDepartment) {
+      checkAllDepartment.addEventListener("change", () => {
+        const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = checkAllDepartment.checked;
+        });
+        countCheckedEmployees();
+      });
+    }
+
+    const selectedMAKHOA = divMAKHOA.value;
+    displayEmployees(selectedMAKHOA);
+
+    divMAKHOA.addEventListener("change", () => {
+      displayEmployees(divMAKHOA.value);
+      if (checkAllDepartment) {
+        checkAllDepartment.checked = false;
+      }
+      updateCheckboxSelection();
+    });
+  }
+
+  function updateCheckboxSelection() {
+    const divSelectedEmployees = document.querySelector("[data-selectedemployees]");
+    const divMANV = document.querySelector("[divmanv]");
+    
+    if (divSelectedEmployees && divMANV) {
+      const selectedEmployeesJSON = divSelectedEmployees.getAttribute("data-selectedemployees");
+      const selectedEmployees = JSON.parse(selectedEmployeesJSON);
+      const formChecks = divMANV.querySelectorAll(`input[type="checkbox"]`);
+      
+      let checkedEmployees = 0; // Số lượng ô đã được đánh dấu
+      let totalEmployees = 0; // Tổng số ô đánh dấu
+      
+      formChecks.forEach(checkbox => {
+        const value = checkbox.value;
+        const isSelected = selectedEmployees.some(employee => employee.MANV === value);
+        checkbox.checked = isSelected;
+  
+        if (checkbox.checked) {
+          checkedEmployees++;
+        }
+        totalEmployees++;
+      });
+  
+      // Kiểm tra và cập nhật trạng thái của nút "Chọn tất cả"
+      const checkAllDepartment = document.getElementById("checkAll");
+      if (checkAllDepartment) {
+        if(checkedEmployees === totalEmployees && checkedEmployees != 0) {
+          checkAllDepartment.checked = (checkedEmployees === totalEmployees);
+        }
+        
+      }
+    }
+  }
+  
+  
+  updateCheckboxSelection();
+});
+
+
+
+
+
+
+

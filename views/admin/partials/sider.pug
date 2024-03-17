@@ -3,12 +3,31 @@
     ul
       li
         a(href=`/${prefixAdmin}/dashboard`) Tổng quan
-      li
-        a(href=`/${prefixAdmin}/employee`) Danh mục nhân viên
-      li 
-        a(href=`/${prefixAdmin}/project`) Danh mục đề án
-      li 
-        a(href=`/${prefixAdmin}/location`) Danh mục địa điểm phòng
-      li 
-        a(href=`/${prefixAdmin}/department`) Danh mục khoa
 
+      if(role.permissions.includes("employee-category_view"))
+        li
+          a(href=`/${prefixAdmin}/employee`) Danh sách nhân viên
+
+      if(role.permissions.includes("project-category_view"))    
+        li 
+          a(href=`/${prefixAdmin}/project`) Danh sách đề án
+
+      if(role.permissions.includes("location-category_view"))  
+        li 
+          a(href=`/${prefixAdmin}/location`) Danh sách địa điểm phòng
+
+      if(role.permissions.includes("department-category_view"))  
+        li 
+          a(href=`/${prefixAdmin}/department`) Danh sách khoa
+
+      if(role.permissions.includes("roles_view"))  
+        li 
+          a(href=`/${prefixAdmin}/roles`) Nhóm quyền
+
+      if(role.permissions.includes("roles_permissions"))
+        li
+          a(href=`/${prefixAdmin}/roles/permissions`) Phân quyền
+
+      if(role.permissions.includes("accounts_view"))
+        li
+          a(href=`/${prefixAdmin}/accounts`) Tài khoản

@@ -25,8 +25,8 @@ block main
               value: "TENNV"
             },
             {
-              label: "Mã nhân viên",
-              value: "MANV"
+              label: "Địa chỉ nhân viên",
+              value: "DCHI"
             }
           ])
 
@@ -43,37 +43,21 @@ block main
             {
               label: "Vị trí tăng dần",
               value: "MANV-asc"
-            },
-            {
-              label: "Mã khoa giảm dần",
-              value: "MAKHOA-desc"
-            },
-            {
-              label: "Mã khoa tăng dần",
-              value: "MAKHOA-asc"
-            },
-            {
-              label: "Lương giảm dần",
-              value: "MLUONG-desc"
-            },
-            {
-              label: "Lương tăng dần",
-              value: "MLUONG-asc"
             }
           ])
 
-  
-  .card.mb-3
-      .card-header Danh sách
-      .card-body
-        .row
-          .col-8
-              +form-change-multi(`/${prefixAdmin}/employee/change-multi?_method=PATCH`)
-          .col-4
-              a(
-                href=`/${prefixAdmin}/employee/create`
-                class="btn btn-outline-success"
-              ) + Thêm mới
+  if(role.permissions.includes("employee-category_create"))
+    .card.mb-3
+        .card-header Danh sách
+        .card-body
+          .row
+            .col-8
+                +form-change-multi(`/${prefixAdmin}/employee/change-multi?_method=PATCH`)
+            .col-4
+                a(
+                  href=`/${prefixAdmin}/employee/create`
+                  class="btn btn-outline-success"
+                ) + Thêm mới
 
 
   table(
@@ -93,9 +77,9 @@ block main
         th Ngày sinh
         th Giới tính
         th Địa chỉ
-        th Mức lương
-        th KHOA
-        th Status
+        th Chức vụ
+        if(role.permissions.includes("employee-category_edit"))
+          th Status
         th Hành động
 
     tbody
@@ -108,7 +92,7 @@ block main
                 name="id"
                 value=employee.MANV
               ) 
-            td #{index + 1}
+            td #{pagination.limitItems *(pagination.currentPage -1 ) + (index + 1)}
             td
               img(
                 src=employee.IMAGE
@@ -119,38 +103,40 @@ block main
             td #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
             td #{employee.NGSINH}
             td #{employee.PHAI}
-            td #{employee.DCHI}
-            td #{employee.MLUONG.toLocaleString()}đ
-            td #{employee.MAKHOA}
-            td
-              if(employee.status == "active")
-                button(
-                  class="badge badge-success"
-                  button-change-status
-                  data-status=employee.status
-                  data-id=employee.MANV
-                ) Hoạt động
-              else
-                button(
-                  class="badge badge-danger"
-                  button-change-status
-                  data-status=employee.status
-                  data-id=employee.MANV
-                ) Dừng hoạt động
+            td #{employee.DCHI} 
+            td #{employee.title}
+            if(role.permissions.includes("employee-category_edit"))
+              td
+                  if(employee.status == "active")
+                    button(
+                      class="badge badge-success"
+                      button-change-status
+                      data-status=employee.status
+                      data-id=employee.MANV
+                    ) Hoạt động
+                  else
+                    button(
+                      class="badge badge-danger"
+                      button-change-status
+                      data-status=employee.status
+                      data-id=employee.MANV
+                    ) Dừng hoạt động  
             td
               a(
                   href=`/${prefixAdmin}/employee/detail/${employee.MANV}`
                   class="btn btn-secondary btn-sm"
                 ) Chi tiết
-              a(
-                  href=`/${prefixAdmin}/employee/edit/${employee.MANV}`
-                  class="btn btn-warning btn-sm"
-              ) Sửa
-              button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=employee.MANV
-                  ) Xóa
+              if(role.permissions.includes("employee-category_edit"))  
+                a(
+                    href=`/${prefixAdmin}/employee/edit/${employee.MANV}`
+                    class="btn btn-warning btn-sm"
+                ) Sửa
+              if(role.permissions.includes("employee-category_delete"))
+                button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete
+                      data-id=employee.MANV
+                    ) Xóa
       else
         tr
           td(

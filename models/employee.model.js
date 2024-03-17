@@ -20,6 +20,10 @@ const Employee = sequelize.define("employee", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
+  email: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
   NGSINH: {
     type: DataTypes.DATE,
   },
@@ -29,10 +33,6 @@ const Employee = sequelize.define("employee", {
   },
   DCHI: {
     type: DataTypes.STRING(255),
-    allowNull: false,
-  },
-  MLUONG: {
-    type: DataTypes.INTEGER,
     allowNull: false,
   },
   MA_NQL: {

@@ -2,38 +2,42 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  if(project.TENDA)
-    h1(class="mb-4") #{project.TENDA}
+  if(role.permissions.includes("project-category_view"))
+    if(project.TENDA)
+      h1(class="mb-4") #{project.TENDA}
 
-  if (project.TRPHG)
-    div(class="mb-4") Trưởng dự án: <b>#{project.TRPHG}</b>
+    if (project.TRPHG)
+      div(class="mb-4") Trưởng dự án: <b>#{project.TRPHG}</b>
 
-  if (project.NGNC)
-    div(class="mb-4") Ngày nhận chức: <b>#{project.NGNC}</b>
+    if (project.NGNC)
+      div(class="mb-4") Ngày nhận chức: <b>#{project.NGNC}</b>
 
-  if (project.NGTL)
-    div(class="mb-4") Ngày bắt đầu: <b>#{project.NGTL}</b>
+    if (project.NGTL)
+      div(class="mb-4") Ngày bắt đầu: <b>#{project.NGTL}</b>
 
-  if (project.NGAYKT)
-    div(class="mb-4") Ngày kết thúc: <b>#{project.NGAYKT}</b>
+    if (project.NGAYKT)
+      div(class="mb-4") Ngày kết thúc: <b>#{project.NGAYKT}</b>
 
-  if (project.IMAGE)
-    div(class="mb-4")
-      img(
-        src=project.IMAGE
-        style="width: 200px"
-      )
+    if (project.desc)
+      div(class="mb-4") !{project.desc}
 
-  if (project.status)
-    div(class="mb-4")
-      span Trạng thái:
-      if (project.status === "active")
-        span(class="badge badge-success") Hoạt động
-      else
-        span(class="badge badge-danger") Dừng hoạt động
+    if (project.IMAGE)
+      div(class="mb-4")
+        img(
+          src=project.IMAGE
+          style="width: 200px"
+        )
 
-  if (project.createdAt)
-    div(class="mb-4") Ngày tạo: <b>#{project.createdAt}</b>
+    if (project.status)
+      div(class="mb-4")
+        span Trạng thái:
+        if (project.status === "active")
+          span(class="badge badge-success") Hoạt động
+        else
+          span(class="badge badge-danger") Dừng hoạt động
 
-  if (project.updatedAt)
-    div(class="mb-4") Ngày cập nhật: <b>#{project.updatedAt}</b>
+    if (project.createdAt)
+      div(class="mb-4") Ngày tạo: <b>#{project.createdAt}</b>
+
+    if (project.updatedAt)
+      div(class="mb-4") Ngày cập nhật: <b>#{project.updatedAt}</b>

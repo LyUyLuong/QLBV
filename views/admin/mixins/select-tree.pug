@@ -1,0 +1,14 @@
+mixin select-tree(items, level = 1)
+  each item in items
+    - const prefix = Array(level+1).join("-- ")
+    option(value=item.MAKHOA) #{prefix}#{item.TENKHOA}
+    if(item.children)
+      +select-tree(item.children, level+1)
+
+mixin select-treeMAKHOA(items, defaultSelection = null, level = 1)
+  each item in items
+    - const prefix = Array(level + 1).join("-- ")
+    option(value=item.MAKHOA, selected=item.MAKHOA === defaultSelection) #{prefix}#{item.TENKHOA}
+    if(item.children)
+      +select-treeMAKHOA(item.children, defaultSelection, level + 1)
+

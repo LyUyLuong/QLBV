@@ -2,44 +2,45 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  if(employee.HONV && employee.TENLOT && employee.TENNV)
-    h1(class="mb-4") #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
+  if(role.permissions.includes("employee-category_view"))
+    if(employee.HONV && employee.TENLOT && employee.TENNV)
+      h1(class="mb-4") #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
 
-  if (employee.MLUONG)
-    div(class="mb-4") Mức lương: <b>#{employee.MLUONG.toLocaleString()}đ</b>
+    if (employee.MLUONG)
+      div(class="mb-4") Mức lương: <b>#{employee.MLUONG.toLocaleString()}đ</b>
 
-  if (employee.NGSINH)
-    div(class="mb-4") Ngày sinh: <b>#{employee.NGSINH}</b>
+    if (employee.NGSINH)
+      div(class="mb-4") Ngày sinh: <b>#{employee.NGSINH}</b>
 
-  if (employee.DCHI)
-    div(class="mb-4") Địa chỉ: <b>#{employee.DCHI}</b>
+    if (employee.DCHI)
+      div(class="mb-4") Địa chỉ: <b>#{employee.DCHI}</b>
 
-  if (employee.MA_NQL)
-    div(class="mb-4") Mã NQL: <b>#{employee.MA_NQL}</b>
+    if (employee.MA_NQL)
+      div(class="mb-4") Mã NQL: <b>#{employee.MA_NQL}</b>
 
-  if (employee.MAKHOA)
-    div(class="mb-4") Mã khoa: <b>#{employee.MAKHOA}</b>
+    if (employee.MAKHOA)
+      div(class="mb-4") Mã khoa: <b>#{employee.MAKHOA}</b>
 
-  if (employee.IMAGE)
-    div(class="mb-4")
-      img(
-        src=employee.IMAGE
-        style="width: 200px"
-      )
+    if (employee.IMAGE)
+      div(class="mb-4")
+        img(
+          src=employee.IMAGE
+          style="width: 200px"
+        )
 
-  if (employee.status)
-    div(class="mb-4")
-      span Trạng thái:
-      if (employee.status === "active")
-        span(class="badge badge-success") Hoạt động
-      else
-        span(class="badge badge-danger") Dừng hoạt động
+    if (employee.status)
+      div(class="mb-4")
+        span Trạng thái:
+        if (employee.status === "active")
+          span(class="badge badge-success") Hoạt động
+        else
+          span(class="badge badge-danger") Dừng hoạt động
 
-  if (employee.VAOLAM)
-    div(class="mb-4") Ngày vào làm: <b>#{employee.VAOLAM}</b>
+    if (employee.VAOLAM)
+      div(class="mb-4") Ngày vào làm: <b>#{employee.VAOLAM}</b>
 
-  if (employee.createdAt)
-    div(class="mb-4") Ngày tạo: <b>#{employee.createdAt}</b>
+    if (employee.createdAt)
+      div(class="mb-4") Ngày tạo: <b>#{employee.createdAt}</b>
 
-  if (employee.updatedAt)
-    div(class="mb-4") Ngày cập nhật: <b>#{employee.updatedAt}</b>
+    if (employee.updatedAt)
+      div(class="mb-4") Ngày cập nhật: <b>#{employee.updatedAt}</b>
