@@ -13,7 +13,7 @@ const Role = sequelize.define("role", {
   },
   MLUONG: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   description: {
     type: DataTypes.STRING(255),

@@ -2,3 +2,52 @@ extends ../../layouts/default.pug
 
 block main
   h1 Trang tổng quan
+
+  .row.mt-4
+    .col-12
+      .card.mb-4
+        .card-header Thông tin tài khoản
+        .card-body
+          if(userUsing.IMAGE)
+            img(
+              src=userUsing.IMAGE
+              style="height: 100px;margin-bottom: 15px;"
+            )
+          p Họ tên: <b>#{userUsing.HONV} #{userUsing.TENLOT} #{userUsing.TENNV} </b>
+          if(userUsing.email)
+            p Email: <b>#{userUsing.email}</b>
+          if(role.title)
+            p Phân quyền: <b>#{role.title}</b>
+          
+
+    .col-6
+      .card.mb-4
+        .card-header Nhân viên
+        .card-body
+          p Số lượng: <b>#{statistic.employees.total}</b>
+          p Hoạt động: <b>#{statistic.employees.active}</b>
+          p Dừng hoạt động: <b>#{statistic.employees.inactive}</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Đề án
+        .card-body
+          p Số lượng: <b>#{statistic.projects.total}</b>
+          p Hoạt động: <b>#{statistic.projects.active}</b>
+          p Dừng hoạt động: <b>#{statistic.projects.inactive}</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Địa điểm phòng
+        .card-body
+          p Số lượng: <b>#{statistic.locations.total}</b>
+          p Hoạt động: <b>#{statistic.locations.active}</b>
+          p Dừng hoạt động: <b>#{statistic.locations.inactive}</b>
+
+    .col-6
+      .card.mb-4
+        .card-header Khoa
+        .card-body
+          p Số lượng: <b>#{statistic.departments.total}</b>
+          p Hoạt động: <b>#{statistic.departments.active}</b>
+          p Dừng hoạt động: <b>#{statistic.departments.inactive}</b>

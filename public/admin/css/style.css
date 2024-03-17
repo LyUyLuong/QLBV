@@ -103,3 +103,13 @@
   display: none;
 }
 /* End Image Preview */
+
+
+.form-check {
+  display: inline-block; /* Hiển thị các phần tử form-check theo chiều ngang */
+  margin-right: 10px; /* Khoảng cách giữa các phần tử form-check */
+}
+
+.divMANV {
+  display: block; /* Hiển thị phần tử divMANV dưới dạng khối (mỗi thẻ div sẽ xuống dòng một khi không đủ không gian) */
+}

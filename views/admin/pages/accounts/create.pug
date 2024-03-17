@@ -1,69 +1,70 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới tài khoản
-  div(data-email=MANVs)
-  form(
-    action=`/${prefixAdmin}/accounts/create`
-    method="POST"
+  if(role.permissions.includes("accounts_create"))
+    h1(class="mb-4") Thêm mới tài khoản
+    div(data-email=MANVs)
+    form(
+      action=`/${prefixAdmin}/accounts/create`
+      method="POST"
 
-  )
-    div(class="form-group")
-      label(for="MANV") Mã NV
-      select(
-        class="form-control"
-        id="MANV"
-        name="MANV"
-        required
-      )
-        each NV in MANVs 
-          option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
-    div(class="form-group")
-      label(for="email") Email *
-      input(
-        type="email"
-        class="form-control"
-        id="email"
-        name="email" 
-        required
-      )
-    
-    div(class="form-group")
-      label(for="password") Mật khẩu *
-      input(
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-        required
-      )
-    div(class="form-group")
-      label(for="role_id") Phân quyền
-      select(name="role_id" id="role_id" class="form-control")
-        option(disabled) -- Chọn --
-        each item in roles
-          option(value=item.id) #{item.title}
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked
-      )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusInActive"
-        name="status"
-        value="inactive"
-      )
-      label(for="statusInActive" class="form-check-label") Dừng hoạt động
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+    )
+      div(class="form-group")
+        label(for="MANV") Mã NV
+        select(
+          class="form-control"
+          id="MANV"
+          name="MANV"
+          required
+        )
+          each NV in MANVs 
+            option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
+      div(class="form-group")
+        label(for="email") Email *
+        input(
+          type="email"
+          class="form-control"
+          id="email"
+          name="email" 
+          required
+        )
+      
+      div(class="form-group")
+        label(for="password") Mật khẩu *
+        input(
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+        )
+      div(class="form-group")
+        label(for="role_id") Phân quyền
+        select(name="role_id" id="role_id" class="form-control")
+          option(disabled) -- Chọn --
+          each item in roles
+            option(value=item.id) #{item.title}
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+        )
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới

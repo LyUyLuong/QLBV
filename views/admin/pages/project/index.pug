@@ -70,17 +70,18 @@ block main
             }
           ])
   
-  .card.mb-3
-      .card-header Danh sách
-      .card-body
-        .row
-          .col-8
-              +form-change-multi(`/${prefixAdmin}/project/change-multi?_method=PATCH`)
-          .col-4
-              a(
-                href=`/${prefixAdmin}/project/create`
-                class="btn btn-outline-success"
-              ) + Thêm mới
+  if(role.permissions.includes("project-category_create"))
+    .card.mb-3
+        .card-header Danh sách
+        .card-body
+          .row
+            .col-8
+                +form-change-multi(`/${prefixAdmin}/project/change-multi?_method=PATCH`)
+            .col-4
+                a(
+                  href=`/${prefixAdmin}/project/create`
+                  class="btn btn-outline-success"
+                ) + Thêm mới
 
 
   table(
@@ -97,11 +98,12 @@ block main
         th STT
         th Hình ảnh
         th Tên dự án
-        th Điểm đánh giá
+        th Địa điểm đề án
         th Khoa
         th Ngày bắt đầu
         th Ngày kết thúc
-        th Status
+        if(role.permissions.includes("project-category_edit"))
+          th Status
         th Hành động
 
     tbody
@@ -124,42 +126,49 @@ block main
               )
             td #{project.TENDA}
             td #{project.DDIEM_DA}
-            td #{project.MAKHOA}
+            each department in departments 
+              if(department.MAKHOA == project.MAKHOA) 
+                td #{department.TENKHOA}
+              
+            
             td #{project.NGAYBD}
             td 
               if(project.NGAYKT)
                 p #{project.NGAYKT}
               else 
                 p Đang diễn ra
-            td
-              if(project.status == "active")
-                button(
-                  class="badge badge-success"
-                  button-change-status
-                  data-status=project.status
-                  data-id=project.MADA
-                ) Hoạt động
-              else
-                button(
-                  class="badge badge-danger"
-                  button-change-status
-                  data-status=project.status
-                  data-id=project.MADA
-                ) Dừng hoạt động
+            if(role.permissions.includes("project-category_edit"))
+              td
+                if(project.status == "active")
+                  button(
+                    class="badge badge-success"
+                    button-change-status
+                    data-status=project.status
+                    data-id=project.MADA
+                  ) Hoạt động
+                else
+                  button(
+                    class="badge badge-danger"
+                    button-change-status
+                    data-status=project.status
+                    data-id=project.MADA
+                  ) Dừng hoạt động
             td
               a(
                   href=`/${prefixAdmin}/project/detail/${project.MADA}`
                   class="btn btn-secondary btn-sm"
                 ) Chi tiết
-              a(
-                  href=`/${prefixAdmin}/project/edit/${project.MADA}`
-                  class="btn btn-warning btn-sm"
-              ) Sửa
-              button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=project.MADA
-                  ) Xóa
+              if(role.permissions.includes("project-category_edit"))  
+                a(
+                    href=`/${prefixAdmin}/project/edit/${project.MADA}`
+                    class="btn btn-warning btn-sm"
+                ) Sửa
+              if(role.permissions.includes("project-category_delete"))
+                button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete
+                      data-id=project.MADA
+                    ) Xóa
       else
         tr
           td(

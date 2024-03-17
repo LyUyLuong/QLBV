@@ -5,110 +5,113 @@ block main
   +alert-error(5000)
   +alert-success(5000)
 
-  h1(class="mb-4") Chỉnh sửa dự án
+  if(role.permissions.includes("project-category_edit"))
+    h1(class="mb-4") Chỉnh sửa dự án
+    if(employees)
+      div(data-employees=employees)
+    if(selectedEmployees)
+      div(data-selectedEmployees=selectedEmployees)
+    
 
-  form(
-    action=`/${prefixAdmin}/project/edit/${project.MADA}?_method=PATCH`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label Tên dự án
-      input(
-        type="text"
-        class="form-control"
-        id="projectName"
-        name="TENDA"
-        value=project.TENDA
-      )
-
-    div(class="form-group")
-      label(for="MAKHOA") Khoa
-      select(
-        type="text"
-        class="form-control"
-        id="MAKHOA"
-        name="MAKHOA"
-        placeholder="Mã khoa"
-        required
-      )
-        each department in departments 
-          option(value=department.MAKHOA) #{department.TENKHOA}
-
-      div.form-group
-        label.form-check-label.mx-3(for="checkAll")
-          input.form-check-input(type="checkbox" id="checkAll" name="checkAll")
-          | Check all
-
-      each employee in employees
-        div.form-group.employee(data-employee=employee.MAKHOA)
-          label.form-check-label.mx-3(for=`MANV_${employee.MANV}`)
-            input.form-check-input(type="checkbox" id=`MANV_${employee.MANV}` name="MANV" value=employee.MANV)
-            | #{employee.HONV} #{employee.TENLOT} #{employee.TENNV}
-
-    div(class="form-group")
-      label Ngày bắt đầu
-      input(
-        type="date"
-        class="form-control"
-        id="projectStartDate"
-        name="NGAYBD"
-        value=project.NGAYBD
-      )
-
-    div(class="form-group")
-        label(for="desc") Mô tả
-        textarea(
-          class="form-control textarea-mce"
-          id="desc"
-          name="desc"
-          rows="5"
-        ) #{project.desc}
-
-
-    div(
-        class="form-group"
-        upload-image
-      )
-        label(for="IMAGE") Ảnh
+    form(
+      action=`/${prefixAdmin}/project/edit/${project.MADA}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group")
+        label Tên dự án
         input(
-          type="file"
-          class="form-control-file"
-          id="image"
-          name="IMAGE"
-          accept="image/*"
-          upload-image-input
-        )
-        img(
-          src=project.IMAGE
-          class="image-preview"
-          upload-image-preview
+          type="text"
+          class="form-control"
+          id="projectName"
+          name="TENDA"
+          value=project.TENDA
         )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="projectActive"
-        name="status"
-        value="active"
-        checked=(project.status == "active")
-      )
-      label(for="projectActive" class="form-check-label") Hoạt động
+      div(class="form-group")
+        label(for="MAKHOA") Khoa
+        select(
+          type="text"
+          class="form-control"
+          id="MAKHOA"
+          name="MAKHOA"
+          placeholder="Mã khoa"
+          required
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="projectInactive"
-        name="status"
-        value="inactive"
-        checked=(project.status == "inactive")
-      )
-      label(for="projectInactive" class="form-check-label") Dừng hoạt động
+        )
+          each department in departments 
+            option(value=department.MAKHOA selected=(department.MAKHOA === project.MAKHOA)) #{department.TENKHOA}
+      
+      div(class="form-group")
+        label(for="MANV") Nhân viên
+        input(type="checkbox", id="checkAll" )
+        
+        div(class="form-check" divMANV)
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Chỉnh sửa
+
+      div(class="form-group")
+        label Ngày bắt đầu
+        input(
+          type="date"
+          class="form-control"
+          id="projectStartDate"
+          name="NGAYBD"
+          value=project.NGAYBD
+        )
+
+      div(class="form-group")
+          label(for="desc") Mô tả
+          textarea(
+            class="form-control textarea-mce"
+            id="desc"
+            name="desc"
+            rows="5"
+          ) #{project.desc}
+
+
+      div(
+          class="form-group"
+          upload-image
+        )
+          label(for="IMAGE") Ảnh
+          input(
+            type="file"
+            class="form-control-file"
+            id="image"
+            name="IMAGE"
+            accept="image/*"
+            upload-image-input
+          )
+          img(
+            src=project.IMAGE
+            class="image-preview"
+            upload-image-preview
+          )
+
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="projectActive"
+          name="status"
+          value="active"
+          checked=(project.status == "active")
+        )
+        label(for="projectActive" class="form-check-label") Hoạt động
+
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="projectInactive"
+          name="status"
+          value="inactive"
+          checked=(project.status == "inactive")
+        )
+        label(for="projectInactive" class="form-check-label") Dừng hoạt động
+
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Chỉnh sửa

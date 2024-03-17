@@ -53,18 +53,20 @@ block main
               value: "createdAt-desc"
             }
           ])
-  
-  .card.mb-3
-      .card-header Danh sách
-      .card-body
-        .row
-          .col-8
-              +form-change-multi(`/${prefixAdmin}/location/change-multi?_method=PATCH`)
-          .col-4
-              a(
-                href=`/${prefixAdmin}/location/create`
-                class="btn btn-outline-success"
-              ) + Thêm mới
+
+
+  if(role.permissions.includes("location-category_create"))
+    .card.mb-3
+        .card-header Danh sách
+        .card-body
+          .row
+            .col-8
+                +form-change-multi(`/${prefixAdmin}/location/change-multi?_method=PATCH`)
+            .col-4
+                a(
+                  href=`/${prefixAdmin}/location/create`
+                  class="btn btn-outline-success"
+                ) + Thêm mới
 
 
   table(
@@ -82,7 +84,8 @@ block main
         th Hình ảnh
         th Địa chỉ
         th Khoa
-        th Status
+        if(role.permissions.includes("location-category_edit"))
+          th Status
         th Hành động
 
     tbody
@@ -105,38 +108,45 @@ block main
                 height="auto"
               )
             td #{location.DIADIEM}
-            td #{location.MAKHOA}
-            td
-              if(location.status == "active")
-                button(
-                  class="badge badge-success"
-                  button-change-status
-                  data-status=location.status
-                  data-id=location.MAKHOA
-                  data-location=location.STT
-                ) Hoạt động
-              else
-                button(
-                  class="badge badge-danger"
-                  button-change-status
-                  data-status=location.status
-                  data-id=location.MAKHOA
-                  data-location=location.STT
-                ) Dừng hoạt động
+            each department in departments
+              if(department.MAKHOA == location.MAKHOA)
+                td #{department.TENKHOA}
+
+            if(role.permissions.includes("location-category_edit"))
+              td
+                if(location.status == "active")
+                  button(
+                    class="badge badge-success"
+                    button-change-status
+                    data-status=location.status
+                    data-id=location.MAKHOA
+                    data-location=location.STT
+                  ) Hoạt động
+                else
+                  button(
+                    class="badge badge-danger"
+                    button-change-status
+                    data-status=location.status
+                    data-id=location.MAKHOA
+                    data-location=location.STT
+                  ) Dừng hoạt động
             td
               a(
-                  href=`/${prefixAdmin}/location/detail/${location.MAKHOA}`
+                  href=`/${prefixAdmin}/location/detail/${location.MAKHOA}/${location.STT}`
                   class="btn btn-secondary btn-sm"
                 ) Chi tiết
-              a(
-                  href=`/${prefixAdmin}/location/edit/${location.MAKHOA}`
-                  class="btn btn-warning btn-sm"
-              ) Sửa
-              button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=location.MAKHOA
-                  ) Xóa
+              if(role.permissions.includes("location-category_edit"))
+                a(
+                    href=`/${prefixAdmin}/location/edit/${location.MAKHOA}/${location.STT}`
+                    class="btn btn-warning btn-sm"
+                ) Sửa
+              if(role.permissions.includes("location-category_edit"))
+                button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete
+                      data-id=location.MAKHOA
+                      data-location=location.STT
+                    ) Xóa
       else
         tr
           td(

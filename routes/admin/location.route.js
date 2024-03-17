@@ -18,7 +18,7 @@ router.patch("/change-status/:status/:id/:diadiem", controller.changeStatus);
 router.patch("/change-multi", controller.changeMulti);
 
 router.delete(
-  "/delete/:id",
+  "/delete/:id/:diadiem",
   controller.deleteItem
 );
 
@@ -30,14 +30,14 @@ router.post(
   controller.createPost
 );
 
-router.get("/edit/:id", controller.edit);
+router.get("/edit/:id/:diadiem", controller.edit);
 
 router.patch(
-  "/edit/:id",
+  "/edit/:id/:diadiem",
   upload.single('IMAGE'),
   controller.editPatch
 );
 
-router.get("/detail/:id", controller.detail);
+router.get("/detail/:id/:diadiem", controller.detail);
 
 module.exports = router;

@@ -1,5 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
 
 block main
   +alert-error(5000)
@@ -29,7 +31,8 @@ block main
         id="departmentHead"
         name="TRPHG"
       )
-        each NV in NQL 
+        option(value="") Không có
+        each NV in employees 
           option(value=NV.MANV selected=(NV.MANV == department.TRPHG)) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
 
     div(class="form-group")
@@ -39,10 +42,12 @@ block main
         id="KHOA_CHA"
         name="KHOA_CHA"
       )
-        each khoa in departments 
-          if(khoa.MAKHOA !== department.MAKHOA)
-            option(value=khoa.MAKHOA selected=(khoa.MAKHOA == department.KHOA_CHA)) #{khoa.TENKHOA}
         option(value="") Không có
+        +select-treeMAKHOA(departments, department.KHOA_CHA)
+        //- each khoa in departments 
+        //-   if(khoa.MAKHOA !== department.MAKHOA)
+        //-     option(value=khoa.MAKHOA selected=(khoa.MAKHOA == department.KHOA_CHA)) #{khoa.TENKHOA}
+        
 
 
     div(class="form-group")

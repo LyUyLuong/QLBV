@@ -35,10 +35,6 @@ const Employee = sequelize.define("employee", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  MLUONG: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   MA_NQL: {
     type: DataTypes.STRING(255),
     allowNull: true,

@@ -14,7 +14,12 @@ const { where } = require('sequelize');
 
 // [GET] /admin/accounts/
 module.exports.index = async (req, res) => {
-    // Find
+
+    const permissions = res.locals.role.permissions;
+
+    if(permissions.includes("accounts_view")) {
+
+        // Find
     let find = {
         deleted: false
     };
@@ -49,35 +54,58 @@ module.exports.index = async (req, res) => {
         pageTitle: "Danh sách tài khoản",
         records: records,
     });
+
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+    }
+    
+        
+    
 };
 
 // [GET] /admin/accounts/create
 module.exports.create = async (req, res) => {
-    const roles = await Role.findAll({
-        raw: true
-    })
 
-    const MANVs = await Employee.findAll({
-        where: {
-            deleted: false,
-            status: "active",
-        },// Chỉ lấy trường MANV
-        attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV', 'email'],
-        raw: true
-    })
+    const permissions = res.locals.role.permissions;
 
-    // console.log(roles);
+    if(permissions.includes("accounts_view")) {
 
-    res.render("admin/pages/accounts/create", {
-        pageTitle: "Tạo mới tài khoản",
-        MANVs: MANVs,
-        roles: roles
-    });
+        const roles = await Role.findAll({
+            raw: true
+        })
+    
+        const MANVs = await Employee.findAll({
+            where: {
+                deleted: false,
+                status: "active",
+            },// Chỉ lấy trường MANV
+            attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV', 'email'],
+            raw: true
+        })
+    
+        // console.log(roles);
+    
+        res.render("admin/pages/accounts/create", {
+            pageTitle: "Tạo mới tài khoản",
+            MANVs: MANVs,
+            roles: roles
+        });
+
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+    }
+
+    
 };
 
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
 
+    const permissions = res.locals.role.permissions;
+
+    if(permissions.includes("accounts_view")) {
+
+        
     req.body.token = generateHelper.generateRandomString(30);
     req.body.password = md5(req.body.password);
 
@@ -95,76 +123,103 @@ module.exports.createPost = async (req, res) => {
 
     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
     // res.send("OK")
+
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+    }
+
 };
 
 // [GET] /admin/accounts/edit/:id
 module.exports.edit = async (req, res) => {
-    const find = {
-        MANV: req.params.id,
-        deleted: false,
-    };
 
-    try {
-        const data = await Account.findOne({
-            where: find,
-            raw: true
-        });
+    const permissions = res.locals.role.permissions;
 
-        const employee = await Employee.findOne({
-            where: find,
-            attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV', 'email'],
-            raw: true
-        });
+    if(permissions.includes("accounts_view")) {
 
-        const roles = await Role.findAll({
-            where: {
-                deleted: false,
-            },
-            raw: true
-        });
+        const find = {
+            MANV: req.params.id,
+            deleted: false,
+        };
+    
+        try {
+            const data = await Account.findOne({
+                where: find,
+                raw: true
+            });
+    
+            const employee = await Employee.findOne({
+                where: find,
+                attributes: ['MANV', 'HONV', 'TENLOT', 'TENNV', 'email'],
+                raw: true
+            });
+    
+            const roles = await Role.findAll({
+                where: {
+                    deleted: false,
+                },
+                raw: true
+            });
+    
+            //   console.log(data)
+            //   console.log("-------------------------")
+            //   console.log(employee)
+            //   console.log("-------------------------")
+            //   console.log(roles)
+    
+            res.render("admin/pages/accounts/edit", {
+                pageTitle: "Chỉnh sửa tài khoản",
+                data: data,
+                roles: roles,
+                employee: employee
+            });
+            // res.send("OK");
+        } catch (error) {
+            res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+            console.log(error)
+        }
 
-        //   console.log(data)
-        //   console.log("-------------------------")
-        //   console.log(employee)
-        //   console.log("-------------------------")
-        //   console.log(roles)
-
-        res.render("admin/pages/accounts/edit", {
-            pageTitle: "Chỉnh sửa tài khoản",
-            data: data,
-            roles: roles,
-            employee: employee
-        });
-        // res.send("OK");
-    } catch (error) {
-        res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
-        console.log(error)
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
     }
+
+    
 };
 
 // [PATCH] /admin/accounts/edit/:id
 module.exports.editPatch = async (req, res) => {
-    const id = req.params.id;
 
-    // console.log(id)
+    const permissions = res.locals.role.permissions;
 
-    if (req.body.password) {
-        req.body.password = md5(req.body.password);
-    } else {
-        delete req.body.password;
-    }
-    // console.log(req.body)
+    if(permissions.includes("accounts_view")) {
+
+        const id = req.params.id;
+
+        // console.log(id)
     
-    // console.log(account)
-
-    await Account.update(req.body,{
-        where: {
-            MANV: id
+        if (req.body.password) {
+            req.body.password = md5(req.body.password);
+        } else {
+            delete req.body.password;
         }
-    });
-    req.flash('success', 'Cập nhật thành công');
+        // console.log(req.body)
+        
+        // console.log(account)
     
-    res.redirect("back");
-    // res.send("OK")
+        await Account.update(req.body,{
+            where: {
+                MANV: id
+            }
+        });
+        req.flash('success', 'Cập nhật thành công');
+        
+        res.redirect("back");
+        // res.send("OK")
+
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+    }
+
+
 
 };

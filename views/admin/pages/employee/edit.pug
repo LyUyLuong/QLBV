@@ -1,141 +1,159 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
   +alert-error(5000)
   +alert-success(5000)
 
-  h1(class="mb-4") Chỉnh sửa nhân viên
+  if(role.permissions.includes("employee-category_edit"))
+    h1(class="mb-4") Chỉnh sửa nhân viên
 
-  form(
-    action=`/${prefixAdmin}/employee/edit/${employee.MANV}?_method=PATCH`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label Họ và tên
-      .d-flex
+    form(
+      action=`/${prefixAdmin}/employee/edit/${employee.MANV}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group")
+        label Họ và tên
+        .d-flex
+          input(
+            type="text"
+            class="form-control mr-2"
+            id="lastname"
+            name="HONV"
+            value=employee.HONV
+          )
+          input(
+            type="text"
+            class="form-control mr-2"
+            id="middlename"
+            name="TENLOT"
+            value=employee.TENLOT
+          )
+          input(
+            type="text"
+            class="form-control"
+            id="firstname"
+            name="TENNV"
+            value=employee.TENNV
+          )
+      div(class="form-group")
+        label(for="dob") Ngày sinh
         input(
-          type="text"
-          class="form-control mr-2"
-          id="lastname"
-          name="HONV"
-          value=employee.HONV
+          type="date"
+          class="form-control"
+          id="dob"
+          name="NGSINH"
+          value=employee.NGSINH
         )
-        input(
-          type="text"
-          class="form-control mr-2"
-          id="middlename"
-          name="TENLOT"
-          value=employee.TENLOT
-        )
+
+      div(class="form-group")
+        label(for="email") Email
         input(
           type="text"
           class="form-control"
-          id="firstname"
-          name="TENNV"
-          value=employee.TENNV
+          id="email"
+          name="email"
+          required
+          value=employee.email
         )
-    div(class="form-group")
-      label(for="dob") Ngày sinh
-      input(
-        type="date"
-        class="form-control"
-        id="dob"
-        name="NGSINH"
-        value=employee.NGSINH
-      )
-    div(
-        class="form-group"
-        upload-image
-      )
-        label(for="IMAGE") Ảnh
-        input(
-          type="file"
-          class="form-control-file"
-          id="image"
-          name="IMAGE"
-          accept="image/*"
-          upload-image-input
-        )
-        img(
-          src=employee.IMAGE
-          class="image-preview"
-          upload-image-preview
-        )
-    div(class="form-group")
-      label(for="gender") Giới tính
-      select(
-        class="form-control"
-        id="gender"
-        name="PHAI"
-      )
-        option(value="Nam" selected=employee.PHAI === "Nam") Nam
-        option(value="Nữ" selected=employee.PHAI === "Nữ") Nữ
-    div(class="form-group")
-      label(for="address") Địa chỉ
-      input(
-        type="text"
-        class="form-control"
-        id="address"
-        name="DCHI"
-        value=employee.DCHI
-      )
-    div(class="form-group")
-      label(for="salary") Chức vụ
-      select(
-        class="form-control"
-        id="salary"
-        name="MLUONG"
-        value=employee.MLUONG
-      )
-        each role in roles
-          option(value=role.MLUONG) #{role.title}
-    div(class="form-group")
-      label(for="MA_NQL") Mã NQL
-      select(
-        class="form-control"
-        id="MA_NQL"
-        name="MA_NQL"
-        value=employee.MA_NQL
-      )
-        option(value=" ") Không có
-        each NV in NQL 
-          option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
-    div(class="form-group")
-      label(for="department") Khoa
-      select(
-        class="form-control"
-        id="department"
-        name="MAKHOA"
-        value=employee.MAKHOA
-      )
-        each department in departments 
-          option(value=department.MAKHOA) #{department.TENKHOA}
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked=(employee.status == "active" ? true: false)
-      )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusInActive"
-        name="status"
-        value="inactive"
-        checked=(employee.status == "inactive" ? true: false)
-      )
-      label(for="statusInActive" class="form-check-label") Dừng hoạt động
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Chỉnh sửa
+      div(
+          class="form-group"
+          upload-image
+        )
+          label(for="IMAGE") Ảnh
+          input(
+            type="file"
+            class="form-control-file"
+            id="image"
+            name="IMAGE"
+            accept="image/*"
+            upload-image-input
+          )
+          img(
+            src=employee.IMAGE
+            class="image-preview"
+            upload-image-preview
+          )
+      div(class="form-group")
+        label(for="gender") Giới tính
+        select(
+          class="form-control"
+          id="gender"
+          name="PHAI"
+        )
+          option(value="Nam" selected=employee.PHAI === "Nam") Nam
+          option(value="Nữ" selected=employee.PHAI === "Nữ") Nữ
+      div(class="form-group")
+        label(for="address") Địa chỉ
+        input(
+          type="text"
+          class="form-control"
+          id="address"
+          name="DCHI"
+          value=employee.DCHI
+        )
+      div(class="form-group")
+        label(for="role_id") Chức vụ
+        select(
+          class="form-control"
+          id="role_id"
+          name="role_id"
+          required
+        )
+          each role in roles
+            option(value=role.id, selected= role.id === chucvu.role_id) #{role.title}
+      div(class="form-group")
+        label(for="MA_NQL") Mã NQL
+        select(
+          class="form-control"
+          id="MA_NQL"
+          name="MA_NQL"
+          value=employee.MA_NQL
+        )
+          option(value=" ") Không có
+          each NV in NQL 
+            option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
+      div(class="form-group")
+        label(for="department") Khoa
+        select(
+          class="form-control"
+          id="department"
+          name="MAKHOA"
+        )
+          +select-treeMAKHOA(departments, employee.MAKHOA)
+          //- each department in departments 
+          //-   if department.MAKHOA === employee.MAKHOA
+          //-     option(value=department.MAKHOA selected) #{department.TENKHOA}
+          //-   else
+          //-     option(value=department.MAKHOA) #{department.TENKHOA}
+
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked=(employee.status == "active" ? true: false)
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+          checked=(employee.status == "inactive" ? true: false)
+        )
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Chỉnh sửa
 

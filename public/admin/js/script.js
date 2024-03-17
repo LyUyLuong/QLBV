@@ -227,82 +227,6 @@ if (uploadImage) {
 }
 // End Preview Image
 
-// Select MAKHOA in project controller
-
-
-const checkAllCheckbox = document.getElementById("checkAll");
-
-if (checkAllCheckbox) {
-
-  checkAllCheckbox.addEventListener("change", function (event) {
-    const isChecked = event.target.checked; // Kiểm tra xem checkbox check all đã được chọn hay không
-    const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']"); // Lấy tất cả các checkbox nhân viên
-
-    // Kiểm tra xem có ít nhất một checkbox nhân viên tồn tại hay không
-    const hasEmployees = employeeCheckboxes.length > 0;
-
-
-    // Ẩn hoặc hiển thị checkbox checkall tùy thuộc vào có nhân viên trong khoa hay không
-    checkAllCheckbox.style.display = hasEmployees ? "block" : "none";
-
-    // Đặt trạng thái checked của tất cả các checkbox nhân viên theo trạng thái của checkbox check all
-    employeeCheckboxes.forEach(function (checkbox) {
-      checkbox.checked = isChecked;
-    });
-  });
-
-}
-
-
-// Lắng nghe sự kiện change trên các ô nhân viên
-const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']");
-employeeCheckboxes.forEach(function (checkbox) {
-  checkbox.addEventListener("change", function () {
-    const allChecked = Array.from(employeeCheckboxes).every(function (checkbox) {
-      return checkbox.checked;
-    });
-
-    // Kiểm tra nếu tất cả các ô nhân viên đã được chọn thì kiểm tra ô "Check all", ngược lại thì bỏ kiểm tra
-    checkAllCheckbox.checked = allChecked;
-  });
-});
-
-
-// Lắng nghe sự kiện change trên thẻ select mã khoa
-const selectMakhoa = document.getElementById("MAKHOA");
-
-if (selectMakhoa) {
-
-  selectMakhoa.addEventListener("change", function (event) {
-    // Xóa các checkbox đã chọn
-
-    checkAllCheckbox.checked = false;
-    const employeeCheckboxes = document.querySelectorAll(".form-check-input[name='MANV']:checked");
-    employeeCheckboxes.forEach(function (checkbox) {
-      checkbox.checked = false;
-    });
-
-    // Tiếp tục với xử lý hiển thị nhân viên thuộc mã khoa mới được chọn
-    const selectedMakhoa = event.target.value; // Lấy mã khoa được chọn
-    const employees = document.querySelectorAll(".employee"); // Lấy tất cả các phần tử chứa thông tin nhân viên
-
-    // Ẩn tất cả các nhân viên trước khi hiển thị lại
-    employees.forEach(function (employee) {
-      employee.style.display = "none";
-    });
-
-    // Hiển thị chỉ các nhân viên thuộc mã khoa được chọn
-    const selectedEmployees = document.querySelectorAll(`.employee[data-employee="${selectedMakhoa}"]`);
-    selectedEmployees.forEach(function (employee) {
-      employee.style.display = "block";
-    });
-  });
-}
-
-// End Select MAKHOA in project controller
-
-
-
 // Sort
 const sort = document.querySelector("[sort]");
 if (sort) {
@@ -434,11 +358,174 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-  
   // Chuyển đổi permissions từ chuỗi sang mảng
   // records.forEach(record => {
   //   record.permissions = record.permissions.split(",");
   // });
 
   // console.log(emails);
+
+// Select MAKHOA in create project
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const divMAKHOA = document.getElementById("MAKHOA");
+  const checkAllDepartment = document.getElementById("checkAll");
+
+  if (divMAKHOA) {
+    const divEmployees = document.querySelector("[data-employees]");
+    const divMANV = document.querySelector("[divMANV]");
+
+    function displayEmployees(selectedMAKHOA) {
+      divMANV.innerHTML = '';
+      const employeesJSON = divEmployees.getAttribute("data-employees");
+      const employees = JSON.parse(employeesJSON);
+
+      employees.forEach(employee => {
+        if (employee.MAKHOA === selectedMAKHOA) {
+          const containerDiv = document.createElement('div');
+          containerDiv.className = 'form-check';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'form-check-input';
+          checkbox.id = employee.MANV;
+          checkbox.name = 'MANV';
+          checkbox.value = employee.MANV;
+
+          const label = document.createElement('label');
+          label.className = 'form-check-label';
+          label.htmlFor = employee.MANV;
+          label.textContent = `${employee.HONV} ${employee.TENLOT} ${employee.TENNV}`;
+
+          containerDiv.appendChild(checkbox);
+          containerDiv.appendChild(label);
+
+          divMANV.appendChild(containerDiv);
+        }
+      });
+
+      updateCheckboxEvents(); // Gọi hàm để cập nhật sự kiện cho checkbox
+    }
+
+    function updateCheckboxEvents() {
+      const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+          countCheckedEmployees();
+        });
+      });
+    }
+
+    function countCheckedEmployees() {
+      const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+      const checkboxesNum = checkboxes.length;
+      let checkedEmployees = 0;
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          checkedEmployees++;
+        }
+      });
+
+      // Kiểm tra và cập nhật trạng thái của nút "Chọn tất cả"
+      checkAllDepartment.checked = (checkedEmployees === checkboxesNum);
+    }
+
+    if (checkAllDepartment) {
+      checkAllDepartment.addEventListener("change", () => {
+        const checkboxes = divMANV.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = checkAllDepartment.checked;
+        });
+        countCheckedEmployees();
+      });
+    }
+
+    const selectedMAKHOA = divMAKHOA.value;
+    displayEmployees(selectedMAKHOA);
+
+    divMAKHOA.addEventListener("change", () => {
+      displayEmployees(divMAKHOA.value);
+      if (checkAllDepartment) {
+        checkAllDepartment.checked = false;
+      }
+      updateCheckboxSelection();
+    });
+  }
+
+  function updateCheckboxSelection() {
+    const divSelectedEmployees = document.querySelector("[data-selectedemployees]");
+    const divMANV = document.querySelector("[divmanv]");
+    
+    if (divSelectedEmployees && divMANV) {
+      const selectedEmployeesJSON = divSelectedEmployees.getAttribute("data-selectedemployees");
+      const selectedEmployees = JSON.parse(selectedEmployeesJSON);
+      const formChecks = divMANV.querySelectorAll(`input[type="checkbox"]`);
+      
+      let checkedEmployees = 0; // Số lượng ô đã được đánh dấu
+      let totalEmployees = 0; // Tổng số ô đánh dấu
+      
+      formChecks.forEach(checkbox => {
+        const value = checkbox.value;
+        const isSelected = selectedEmployees.some(employee => employee.MANV === value);
+        checkbox.checked = isSelected;
+  
+        if (checkbox.checked) {
+          checkedEmployees++;
+        }
+        totalEmployees++;
+      });
+  
+      // Kiểm tra và cập nhật trạng thái của nút "Chọn tất cả"
+      const checkAllDepartment = document.getElementById("checkAll");
+      if (checkAllDepartment) {
+        if(checkedEmployees === totalEmployees && checkedEmployees != 0) {
+          checkAllDepartment.checked = (checkedEmployees === totalEmployees);
+        }
+        
+      }
+    }
+  }
+  
+  
+  updateCheckboxSelection();
+});
+
+
+
+
+
+
 

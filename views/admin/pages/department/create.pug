@@ -31,7 +31,7 @@ block main
         name="TRPHG"
       )
         option(value="") Không có
-        each NV in NQL 
+        each NV in employees 
           option(value=NV.MANV) #{NV.MANV}-#{NV.HONV} #{NV.TENLOT} #{NV.TENNV}
 
     div(class="form-group")

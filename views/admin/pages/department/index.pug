@@ -123,7 +123,9 @@ block main
 
             td 
               if(department.KHOA_CHA)
-                p #{department.KHOA_CHA}
+                each khoa in khoas 
+                  if(khoa.MAKHOA == department.KHOA_CHA) 
+                    p #{khoa.TENKHOA}
               else 
                 p Không có
 
